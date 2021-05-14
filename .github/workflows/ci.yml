@@ -6,9 +6,6 @@ on:
     branches-ignore:
       - main
 
-env:
-  REGISTRY: dataswift/base
-
 jobs:
   build:
     name: Build
@@ -22,19 +19,20 @@ jobs:
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v1
-      
+
       - name: Setup Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Container - Login
-        uses: docker/login-action@v1 
+      - name: Container - Login GitHub
+        uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKERHUB_DATASWIFT_USER }}
-          password: ${{ secrets.DOCKERHUB_DATASWIFT_PASS }}
-      
-      - name: Container - Login
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Container - Build & Push
         uses: docker/build-push-action@v2
         with:
           push: false
-          tags: ${{ env.REGISTRY }}:${{ github.sha }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}:latest
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=registry,ref=ghcr.io/dataswift/base:latest
