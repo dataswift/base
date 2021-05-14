@@ -1,0 +1,51 @@
+name: Trivy
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 4 * * MON"
+
+env:
+  ECR_REGISTRY: 006166587607.dkr.ecr.us-east-1.amazonaws.com/devdashboard
+
+jobs:
+  trivy-scan:
+    name: Launch Trivy Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Container - Build
+        run: docker build -t dataswift/base . 
+
+      - name: Container - Scan
+        uses: dataswift/gha-trivy@main
+        id: trivy
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          image: dataswift/base
+          issue: "true"
+          issue_label: trivy, vulnerability, security
+          issue_title: Trivy Security Alert
+
+      # - name: Jira Login
+      #   if: steps.trivy.outputs.issue_number != ''
+      #   uses: atlassian/gajira-login@master
+      #   env:
+      #     JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+      #     JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+      #     JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+      # - name: Jira Issue
+      #   id: jira
+      #   if: steps.trivy.outputs.issue_number != ''
+      #   uses: atlassian/gajira-create@master
+      #   with:
+      #     project: ${{ secrets.JIRA_TRIVY_PROJECT }}
+      #     issuetype: ${{ secrets.JIRA_TRIVY_ISSUE_TYPE }}
+      #     summary: Trivy Security Alert - ${{ github.repository }}
+      #     description: ${{steps.trivy.outputs.html_url}}
