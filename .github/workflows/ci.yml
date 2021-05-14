@@ -36,6 +36,5 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: false
-          tags: 
-            - ${{ env.REGISTRY }}:${{ github.sha }}
+          tags: ${{ env.REGISTRY }}:${{ github.sha }}
           cache-from: type=registry,ref=${{ env.REGISTRY }}:latest
