@@ -49,13 +49,10 @@ jobs:
             dataswift/base
             ghcr.io/dataswift/base
           tags: |
-            type=schedule
-            type=ref,event=branch
-            type=ref,event=pr
+            type=ref,event=latest
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
-            type=sha
 
       - name: Container - Build & Push
         uses: docker/build-push-action@v2
