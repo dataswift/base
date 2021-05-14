@@ -6,7 +6,7 @@ on:
     branches-ignore:
       - main
 
-ENV:
+env:
   REGISTRY: dataswift/base
 
 jobs:
