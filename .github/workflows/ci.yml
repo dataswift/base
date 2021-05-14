@@ -27,8 +27,8 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: dataswiftbotie
+          password: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Container - Build & Push
         uses: docker/build-push-action@v2
