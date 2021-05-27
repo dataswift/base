@@ -16,27 +16,20 @@ jobs:
         with:
           image-ref: ghcr.io/dataswift/base:latest
           format: "template"
+          exit-code: 1
+          ignore-unfixed: true
           template: "@/contrib/sarif.tpl"
           output: "trivy-results.sarif"
           severity: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
 
       - name: Container - Scan - Upload results
         uses: github/codeql-action/upload-sarif@v1
+        if: ${{ failure() }}
         with:
           sarif_file: "trivy-results.sarif"
 
-      - name: Container - Scan
-        uses: dataswift/gha-trivy@main
-        id: trivy
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          image: ghcr.io/dataswift/base:latest
-          issue: "true"
-          issue_label: trivy, vulnerability, security
-          issue_title: Trivy Security Alert
-
       - name: Jira Login
-        if: steps.trivy.outputs.issue_number != ''
+        if: ${{ failure() }}
         uses: atlassian/gajira-login@master
         env:
           JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
@@ -44,11 +37,9 @@ jobs:
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
       - name: Jira Issue
-        id: jira
-        if: steps.trivy.outputs.issue_number != ''
+        if: ${{ failure() }}
         uses: atlassian/gajira-create@master
         with:
           project: ${{ secrets.JIRA_TRIVY_PROJECT }}
           issuetype: ${{ secrets.JIRA_TRIVY_ISSUE_TYPE }}
           summary: Trivy Security Alert - ${{ github.repository }}
-          description: ${{steps.trivy.outputs.html_url}}
