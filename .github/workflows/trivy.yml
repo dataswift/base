@@ -13,12 +13,7 @@ jobs:
     name: Trivy Scan
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      
+    steps:     
       - name: Container - Scan
         uses: aquasecurity/trivy-action@master
         with:
