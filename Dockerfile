@@ -3,7 +3,7 @@ FROM adoptopenjdk/openjdk11:jre-11.0.11_9-alpine@sha256:c069efc08cd8898458087ced
 WORKDIR /opt/docker/bin
 EXPOSE 9000
 
-RUN apk --update-cache upgrade;\
+RUN apk --update-cache upgrade; \
     apk add bash; \
     rm -rf /var/cache/apk/*
 
