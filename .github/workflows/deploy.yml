@@ -52,7 +52,7 @@ jobs:
           tags: |
             type=raw,value=latest
             type=semver,prefix=v,pattern={{version}}
-            type=semver,prefix=v,pattern={{major}}
+            type=semver,prefix=v,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
             type=semver,prefix=v,pattern={{major}}.{{minor}}
 
       - name: Container - Build & Push

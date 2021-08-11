@@ -27,12 +27,12 @@ jobs:
 
       - name: Container - Scan - Upload results
         uses: github/codeql-action/upload-sarif@v1
-        if: ${{ failure() }} && github.event_name == 'schedule'
+        if: ${{ failure() }} && github.event_name == 'schedule' && github.ref == 'refs/heads/main'
         with:
           sarif_file: "trivy-results.sarif"
 
       - name: Jira Login
-        if: ${{ failure() }} && github.event_name == 'schedule'
+        if: ${{ failure() }} && github.event_name == 'schedule' && github.ref == 'refs/heads/main'
         uses: atlassian/gajira-login@master
         env:
           JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
@@ -40,7 +40,7 @@ jobs:
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
       - name: Jira Issue
-        if: ${{ failure() }} && github.event_name == 'schedule'
+        if: ${{ failure() }} && github.event_name == 'schedule' && github.ref == 'refs/heads/main'
         uses: atlassian/gajira-create@master
         with:
           project: ${{ secrets.JIRA_TRIVY_PROJECT }}
