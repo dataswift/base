@@ -5,6 +5,7 @@ on:
   push:
     branches-ignore:
       - main
+      - pperzyna/fix-trivy
   schedule:
     - cron: "30 3 * * *"
 
