@@ -30,9 +30,17 @@ jobs:
           username: ${{ secrets.BOT_GITHUB_NAME }}
           password: ${{ secrets.BOT_GITHUB_TOKEN }}
 
-      - name: Container - Build & Push
+      - name: Container - Build
         uses: docker/build-push-action@v2
         with:
           push: false
           platforms: linux/amd64,linux/arm64
           cache-from: type=registry,ref=ghcr.io/dataswift/base:latest
+
+      - name: Container - Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          exit-code: 1
+          ignore-unfixed: true
+          severity: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
