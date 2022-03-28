@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:jre-11.0.14.1_1-alpine@sha256:4726dab70c724001cfbc12ddc7367e09255326314a546f4ed7d36faeb3ebbe45
+FROM adoptopenjdk/openjdk11:jre-11.0.14.1_1-alpine@sha256:2cb2d9da4c26e559bb4cf962a6489ae58611aa57f4779068bdfb6b1620aec6b7
 
 WORKDIR /opt/docker/bin
 EXPOSE 9000
